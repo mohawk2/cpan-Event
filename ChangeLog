@@ -1,3 +1,11 @@
+Fri Feb  1 12:20:33 2002  Joshua N Pritikin  <vishnu@pobox.com>
+
+	* Release 0.85.
+
+	* Apply patch from Allen Smith <easmith@beatrice.rutgers.edu>
+	to avoid infinite polling loop on some select implementations.
+	Also reported by Marc Lehmann <pcg@goof.com>.
+
 Tue Jan 22 12:20:24 2002  Joshua N Pritikin  <vishnu@pobox.com>
 
 	* Doc StarvePrio (Allen Smith <easmith@beatrice.rutgers.edu>).

@@ -89,8 +89,8 @@ static void pe_sys_multiplex(double timeout) {
 	    ev->xref = -1;
 	    assert(fd >= 0); {
 		int bits=0;
-		if (ev->poll & PE_R) bits |= (POLLIN | POLLRDNORM);
-		if (ev->poll & PE_W) bits |= (POLLOUT |POLLWRNORM |POLLWRBAND);
+		if (ev->poll & PE_R) bits |= (POLLIN | POLLPRI);
+		if (ev->poll & PE_W) bits |= (POLLOUT | POLLWRBAND);
 		if (ev->poll & PE_E) bits |= (POLLRDBAND | POLLPRI);
 		assert(bits); {
 		    int ok=0;;
@@ -131,19 +131,26 @@ static void pe_sys_multiplex(double timeout) {
 	if (xref >= 0) {
 	    int got = 0;
 	    int mask = Pollfd[xref].revents;
-	    if (mask & (POLLIN | POLLRDNORM | POLLHUP)) got |= PE_R;
-	    if (mask & (POLLOUT | POLLWRNORM | POLLWRBAND)) got |= PE_W;
-	    if (mask & (POLLRDBAND | POLLPRI)) got |= PE_E;
+	    if (mask & (POLLIN | POLLPRI | POLLHUP | POLLERR)) got |= PE_R;
+	    if (mask & (POLLOUT | POLLWRBAND | POLLERR)) got |= PE_W;
+	    if (mask & (POLLRDBAND | POLLPRI | POLLHUP | POLLERR)) got |= PE_E;
 	    if (mask & POLLNVAL) {
 		warn("Event: '%s' was unexpectedly closed",
 		     SvPV(ev->base.desc, n_a));
 		pe_io_reset_handle((pe_watcher*) ev);
+	    } else {
+	      if ((mask & POLLHUP) && (ev->poll & PE_W) && (!(got & PE_W))
+		  && (!(ev->poll & PE_R)) && (!(ev->poll & PE_E))) {
+		/* Must notify about POLLHUP _some_ way - Allen */
+		got |= PE_W;
 	    }
-	    else if (got) _queue_io(ev, got);
+
+	      if (got) _queue_io(ev, got);
 	    /*
 	      Can only do this if fd-to-watcher is 1-to-1
 	      if (--ret == 0) { ev=0; continue; }
 	    */
+	    }
 	}
 	ev = next_ev;
     }
