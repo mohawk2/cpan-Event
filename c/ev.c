@@ -83,10 +83,10 @@ static void pe_event_dtor(pe_event *ev) {
 
 static void pe_event_release(pe_event *ev) {
     if (!ev->mysv)
-	(*ev->vtbl->dtor)(ev);
+      (*ev->vtbl->dtor)(ev);
     else {
-	SvREFCNT_dec(ev->mysv);
-	ev->mysv=0;
+	  SvREFCNT_dec(ev->mysv);
+	  ev->mysv=0;
     }
 }
 

@@ -90,7 +90,7 @@ static void pe_sys_multiplex(double timeout) {
 	    assert(fd >= 0); {
 		int bits=0;
 		if (ev->poll & PE_R) bits |= (POLLIN | POLLPRI);
-		if (ev->poll & PE_W) bits |= (POLLOUT | POLLWRBAND);
+		if (ev->poll & PE_W) bits |= POLLOUT;
 		if (ev->poll & PE_E) bits |= (POLLRDBAND | POLLPRI);
 		assert(bits); {
 		    int ok=0;;
@@ -132,7 +132,7 @@ static void pe_sys_multiplex(double timeout) {
 	    int got = 0;
 	    int mask = Pollfd[xref].revents;
 	    if (mask & (POLLIN | POLLPRI | POLLHUP | POLLERR)) got |= PE_R;
-	    if (mask & (POLLOUT | POLLWRBAND | POLLERR)) got |= PE_W;
+	    if (mask & (POLLOUT | POLLERR)) got |= PE_W;
 	    if (mask & (POLLRDBAND | POLLPRI | POLLHUP | POLLERR)) got |= PE_E;
 	    if (mask & POLLNVAL) {
 		warn("Event: '%s' was unexpectedly closed",

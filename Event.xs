@@ -557,13 +557,11 @@ DESTROY(ref)
 	CODE:
 {
 	pe_event *THIS = (pe_event*) sv_2event(ref);
-	/*
-	if (WaDEBUGx(THIS) >= 4) {
+	if (WaDEBUGx(THIS) >= 3) {
 	    STRLEN n_a;
 	    warn("Event=0x%x '%s' DESTROY SV=0x%x",
 		 THIS, SvPV(THIS->up->desc, n_a), SvRV(THIS->mysv));
 	}
-	*/
 	(*THIS->vtbl->dtor)(THIS);
 }
 
