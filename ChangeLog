@@ -1,3 +1,22 @@
+2004-05-14    <joshua@always.joy.eth.net>
+
+	* Release 1.00 (with Marc Lehmann's encouragement).
+
+	* c/watcher.c (pe_watcher_now): Check for a missing callback, not
+	only a missing perl callback.  Marc A. Lehmann <pcg@goof.com>
+
+2004-04-26    <joshua@always.joy.eth.net>
+
+	* lib/Event.pm (import): Make NO_TIME_HIRES actually work. Jerry
+	D. Hedden <jerry@hedden.us>
+
+2004-04-22    <joshua@always.joy.eth.net>
+
+	* c/signal.c (pe_signal_stop): When a signal watcher stops, the
+	signal counter is cleared.  Otherwise the signal watcher can
+	generate one last event after being stopped, which is a
+	bug. (Pointed out by Zefram <zefram@fysh.org>)
+
 2004-04-21    <joshua@always.joy.eth.net>
 
 	* Release 0.88.

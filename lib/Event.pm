@@ -13,7 +13,7 @@ use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX
 use vars qw($VERSION @EXPORT_OK
 	    $API $DebugLevel $Eval $DIED $Now);
-$VERSION = '0.88';
+$VERSION = '1.00';
 
 # If we inherit DynaLoader then we inherit AutoLoader; Bletch!
 require DynaLoader;
@@ -26,7 +26,6 @@ require DynaLoader;
 $DebugLevel = 0;
 $Eval = 0;		# avoid because c_callback is exempt
 $DIED = \&default_exception_handler;
-my $NO_TIME_HIRES = 0;
 
 @EXPORT_OK = qw(time all_events all_watchers all_running all_queued all_idle
 		one_event sweep loop unloop unloop_all sleep queue
@@ -34,6 +33,7 @@ my $NO_TIME_HIRES = 0;
 
 sub import {
   my $pkg = shift;
+  our $NO_TIME_HIRES;
   my @sym;
   for my $sym (@_) {
     if ($sym eq 'NO_TIME_HIRES') {
@@ -42,18 +42,19 @@ sub import {
       push @sym, $sym;
     }
   }
-  $pkg->export_to_level(1, undef, @sym);
-}
 
-if (!$NO_TIME_HIRES) {
+  if (!$NO_TIME_HIRES) {
     eval { require Time::HiRes; };
     if ($@ =~ /^Can\'t locate Time/) {
-        # OK, just continue
+      # OK, just continue
     } elsif ($@) {
-	die if $@;
+      die if $@;
     } else {
-	cache_time_api();  # hook in high precision time
+      cache_time_api();  # hook in high precision time
     }
+  }
+
+  $pkg->export_to_level(1, undef, @sym);
 }
 
 # broadcast_adjust for Time::Warp? XXX

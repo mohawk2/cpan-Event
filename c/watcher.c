@@ -294,7 +294,7 @@ static void pe_register_vtbl(pe_watcher_vtbl *vt, HV *stash,
 static void pe_watcher_now(pe_watcher *wa) {
     pe_event *ev;
     if (WaSUSPEND(wa)) return;
-    if (!WaPERLCB(wa)) {
+    if (!wa->callback) {
       STRLEN n_a;
       croak("Event: attempt to invoke now() method with callback unset on watcher '%s'", SvPV(wa->desc,n_a));
     }

@@ -63,8 +63,11 @@ static void pe_signal_stop(pe_watcher *_ev) {
     pe_signal *ev = (pe_signal*) _ev;
     int sig = ev->signal;
     PE_RING_DETACH(&ev->sring);
-    if (PE_RING_EMPTY(&Sigring[sig]))
+    if (PE_RING_EMPTY(&Sigring[sig])) {
 	rsignal(sig, SIG_DFL);
+        Sigstat[0].hits[sig] = 0;
+        Sigstat[1].hits[sig] = 0;
+    }
 }
 
 WKEYMETH(_signal_signal) {

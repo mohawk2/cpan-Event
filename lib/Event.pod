@@ -705,6 +705,15 @@ Contributed by artur@vogon-solutions.com, 12 Jul 1999.
 
 =head1 BUGS
 
+No support for epoll.  Epoll is the future.
+
+Mac Darwin & MS Win32 have never been supported and remain broken.
+Patches welcome.
+
+The scope of events is pretty strange compared to most other perl
+objects.  I'm not sure if this is a bug or a feature.  We'll probably
+have to re-work things for Perl6.
+
 The meaning of $io->timeout(0) might change.  Use C<undef> to unset
 the timeout.
 
@@ -714,29 +723,6 @@ There seems to be some sort of bug in the global destruction phase:
   Use of uninitialized value during global destruction.
   Explicit blessing to '' (assuming package main) during global
   destruction.
-
-=head2 WHY SELECT/POLL SUCKS
-
-This section is concerned with advanced kernel architecture.
-
-B<A scalable and explicit event delivery mechanism for UNIX>
-
-I<Abstract:> UNIX applications not wishing to block when doing I/O often
-use the select() system call, to wait for events on multiple file
-descriptors. The select() mechanism works well for small-scale
-applications, but scales poorly as the number of file descriptors
-increases. Many modern applications, such as Internet servers, use
-hundreds or thousands of file descriptors, and suffer greatly from the
-poor scalability of select(). Previous work has shown that while the
-traditional implementation of select() can be improved, the poor
-scalability is inherent in the design. We present a new event-delivery
-mechanism, which allows the application to register interest in one or
-more sources of events, and to efficiently dequeue new events. We show
-that this mechanism, which requires only minor changes to
-applications, performs independently of the number of file
-descriptors.
-
-  http://www.usenix.org/events/usenix99/full_papers/banga/banga_html/index.html
 
 =head1 THE FUTURE
 
@@ -800,7 +786,7 @@ those lists below and folks mentioned in the ChangeLog.
 
 Copyright © 1997 Joshua Nathaniel Pritikin & Graham Barr
 
-Copyright © 1998, 1999, 2000, 2001, 2002 Joshua Nathaniel Pritikin
+Copyright © 1998, 1999, 2000, 2001, 2002, 2003, 2004 Joshua Nathaniel Pritikin
 
 All rights reserved.  This program is free software; you can
 redistribute it and/or modify it under the same terms as Perl itself.
