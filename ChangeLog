@@ -1,3 +1,24 @@
+2004-11-29    <joshua@always.joy.eth.net>
+
+	* Release 1.01.
+
+	* Event.xs: Due to popular demand, queue_pending() is now a public
+	API, for better or worse.  Beware of race conditions.
+
+2004-11-29    Zefram <zefram@fysh.org>
+
+	* A var watcher can currently be created with no variable to
+	watch, provided of course that it is parked.  However, once a
+	variable has been set, the watcher cannot be returned to the
+	no-variable state.  The variable to watch can be changed, but the
+	watcher rejects any attempt to set the reference to undef.
+
+	Applied a patch to allow the variable reference of a var watcher
+	to be set to undef.
+
+	* Applied patch to clarify the documentation (with tweaks from
+	Joshua).
+
 2004-05-14    <joshua@always.joy.eth.net>
 
 	* Release 1.00 (with Marc Lehmann's encouragement).

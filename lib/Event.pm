@@ -13,7 +13,7 @@ use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX
 use vars qw($VERSION @EXPORT_OK
 	    $API $DebugLevel $Eval $DIED $Now);
-$VERSION = '1.00';
+$VERSION = '1.01';
 
 # If we inherit DynaLoader then we inherit AutoLoader; Bletch!
 require DynaLoader;
@@ -29,6 +29,7 @@ $DIED = \&default_exception_handler;
 
 @EXPORT_OK = qw(time all_events all_watchers all_running all_queued all_idle
 		one_event sweep loop unloop unloop_all sleep queue
+		queue_pending
 		QUEUES PRIO_NORMAL PRIO_HIGH NO_TIME_HIRES);
 
 sub import {
@@ -119,7 +120,7 @@ sub verbose_exception_handler { #AUTOLOAD XXX
 
 sub sweep {
     my $prio = @_ ? shift : QUEUES();
-    _queue_pending();
+    queue_pending();
     my $errsv = '';
     while (1) {
 	eval { $@ = $errsv; _empty_queue($prio) };

@@ -150,10 +150,12 @@ WKEYMETH(_var_variable) {
     if (nval) {
 	SV *old = vp->variable;
 	int active = WaPOLLING(ev);
-	if (!SvROK(nval))
-	    croak("Expecting a reference");
-	if (SvTYPE(SvRV(nval)) > SVt_PVMG)
-	    croak("Var watchers can only watch plain vanilla scalars");
+	if (SvOK(nval)) {
+	    if (!SvROK(nval))
+		croak("Expecting a reference");
+	    if (SvTYPE(SvRV(nval)) > SVt_PVMG)
+		croak("Var watchers can only watch plain vanilla scalars");
+	}
 	if (active) pe_watcher_off(ev);
 	vp->variable = SvREFCNT_inc(nval);
 	if (active) pe_watcher_on(ev, 0);

@@ -505,7 +505,7 @@ _loop()
 	LEAVE; /* reentry */
 
 void
-_queue_pending()
+queue_pending()
 	CODE:
 	pe_queue_pending();
 
