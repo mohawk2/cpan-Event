@@ -1,5 +1,17 @@
 #if !defined(NSIG) || defined(M_UNIX) || defined(M_XENIX)
+
+// Fix signal macro compatibility with signal.h of MS VC++:
+#ifdef WIN32
+#define signal win32_signal
+#endif
+
 #include <signal.h>
+
+// Get back Perl marcro value defined ad XSUB.h:
+#ifdef WIN32
+#define signal PerlProc_signal
+#endif
+
 #endif
 
 static struct pe_watcher_vtbl pe_signal_vtbl;
