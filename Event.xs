@@ -120,8 +120,6 @@ static void Event_croak(const char* pat, ...) {
 
 static double fallback_NVtime()
 { return time(0); }
-static void fallback_U2time(U32 *ret)
-{ ret[0]=time(0); ret[1]=0; }
 
 #include "Event.h"
 
@@ -314,6 +312,7 @@ BOOT:
       api.cancel = pe_watcher_cancel;
       api.tstart = pe_timeable_start;
       api.tstop  = pe_timeable_stop;
+      api.NVtime = fallback_NVtime;
       api.new_idle =   (pe_idle*  (*)(HV*,SV*))    pe_idle_allocate;
       api.new_timer =  (pe_timer* (*)(HV*,SV*))    pe_timer_allocate;
       api.new_io =     (pe_io*    (*)(HV*,SV*))    pe_io_allocate;
@@ -395,15 +394,6 @@ cache_time_api()
 	    XSRETURN_NO;
 	api.NVtime = (double(*)()) SvIV(*svp);
 	XSRETURN_YES;
-
-void
-install_time_api()
-	CODE:
-	SV **svp = hv_fetch(PL_modglobal, "Time::NVtime", 12, 0);
-	svp = hv_store(PL_modglobal, "Time::NVtime", 12,
-			 newSViv((IV) fallback_NVtime), 0);
-	hv_store(PL_modglobal, "Time::U2time", 12,
-			 newSViv((IV) fallback_U2time), 0);
 
 double
 time()

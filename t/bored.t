@@ -1,5 +1,5 @@
 # -*- perl -*-
-use Test; plan test => 4;
+use Test; plan test => 5;
 use Event;
 
 # $Event::DebugLevel = 3;
@@ -8,6 +8,8 @@ my $really_bored;
 my $w;
 $w = Event->timer(after => .5, parked => 1);
 ok !defined $w->cb;
+eval { $w->now() };
+ok $@ =~ /callback unset/;
 $w->cb(sub {
 	   if (!$really_bored) {
 	       $w->again;

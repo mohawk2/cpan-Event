@@ -1,3 +1,30 @@
+2004-04-21    <joshua@always.joy.eth.net>
+
+	* Release 0.88.
+
+	* lib/Event.pm: Simplify hooking into Time::HiRes.  Add a
+	NO_HIRES_TIME export_ok symbol to turn off the probing.
+
+	* Event.xs: Remove U2time. Remove install_time_api().
+
+	* lib/Event.pod: More refinement from Zefram <zefram@fysh.org>.
+
+	* lib/Event.pod: ($watcher->pending & signal watchers): More
+	specific description by Zefram <zefram@fysh.org>.
+
+	* c/watcher.c (pe_watcher_now): Fix SEGV reported by Zefram
+	<zefram@fysh.org>.  Add test.
+
+2004-04-05    <joshua@always.joy.eth.net>
+
+	* lib/Event.pod (timer): Correction by Randal L. Schwartz
+	<merlyn@stonehenge.com>.
+
+2004-04-03    <joshua@always.joy.eth.net>
+
+	* lib/Event.pod (timer): Doc clarification
+	(jdhedden@1979.usna.com).
+
 Tue Feb 18 21:57:04 2003  Joshua N Pritikin  <vishnu@pobox.com>
 
 	* Release 0.87.

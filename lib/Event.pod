@@ -228,8 +228,9 @@ Reports whether the C<$watcher> is suspended.
 
 =item $watcher->pending
 
-Returns whether this watcher has any events pending in the event
-queue.
+In scalar context, returns a boolean indicating whether this watcher
+has any events pending in the event queue.  In array context, returns
+a list of all the watcher's pending events.
 
 =back
 
@@ -243,34 +244,54 @@ Extra attributes: min => $seconds, max => $seconds
 
 The callback is invoked only when no events are pending.  If there is
 never a chance to idle, an event will be generated at least every
-C<max> seconds and not more often than C<min> seconds.
+C<max> seconds.  While Event is idle, events will be generated not more
+often than C<min> seconds.
+
+If neither C<min> nor C<max> is specified, the watcher defaults to
+one-shot behaviour (C<repeat> false), otherwise it defaults to repeating.
+In either case, the default can be overidden by specifying a C<repeat>
+attribute.  C<min> defaults to 0.01, and C<max> defaults to infinity.
 
 =item var
 
 Extra attributes: var => \$var, poll => 'rw'
 
 Var watchers generate events when the given variable is read from or
-written to.  As perl is a concise language, it is often difficult to
+written to.  C<poll> defaults to "w".
+
+As perl is a concise language, it is often difficult to
 predict when a variable will be read.  For this reason, variable
 watchers should poll for writes unless you know what you are doing.
 
 =item timer
 
-Extra attributes: at => $time, interval => $sec, hard => $bool
+Extra attributes: at => $time, after => $sec, interval => $sec, hard => $bool
 
-The C<$time> and C<$sec> are in seconds.  Fractional seconds may be
-used if Time::HiRes is available.  The constructor also accepts an
-C<after> attribute for easier initialization.  It might be useful to
-know the time at the start of today.  You can find it with:
+The C<$time> and C<$sec> are in seconds.  Fractional seconds may be used
+if Time::HiRes is available.  C<at> and C<after> are mutually exclusive.
+
+C<at> or C<after> specify the initial time that the event will trigger.
+Subsequent timer events occur at intervals specified by C<interval>
+or C<after> (in that order of preference) if either was supplied.
+The timer defaults to one-shot behaviour if C<interval> was not specified,
+or repeating behaviour if C<interval> was specified; in either case this
+can be overridden by providing C<repeat> explicitly.
+
+You need to know the time at the start of today if you are trying to
+set timers to trigger at day relative times.  You can find it with:
 
   use Time::Local;
   my $TodaySeconds = int timelocal(0,0,0,(localtime)[3,4,5]);
 
-If C<interval> is set then the watcher will automatically repeat.  Be
-aware that due to lags in the event loop, the C<interval> timeout may
+This calculation may seem a little heavy weight.  If you don't care
+about daylight savings time then you can use this instead:
+
+  my $TodaySeconds = time - time % 86400;
+
+Beware that, due to lags in the event loop, the C<interval> timeout may
 already be in the past.  If the C<hard> flag is set, the event will be
 queued for execution relative to the last time the callback was
-invoke.  However, if C<hard> is false the new timeout will be
+invoked.  However, if C<hard> is false the new timeout will be
 calculated relative to the current time (this is the default).
 
 =item io
@@ -281,11 +302,12 @@ Extra attributes: fd => $fd, poll => 'rwe'
 The callback is invoked when the file descriptor, C<fd>, has data to
 be read, written, or pending exceptions.  C<fd> can be a GLOB, an
 IO::Handle object, or a file number (file descriptor).
+C<poll> defaults to "r".
 
 Note that it is your option whether to have multiple watchers per file
 handle or to use a single watcher for all event conditions.
 
-If timeout_cb is set then timeouts use this alternate callback instead
+If C<timeout_cb> is set then timeouts use this alternate callback instead
 of the main callback.
 
 =item signal
@@ -486,8 +508,12 @@ to true.
 
 The callback is invoked after the specified signal is received.  The
 $str string should be something like 'INT' or 'QUIT'.  Also see the
-documentation for C<%SIG>.  A given signal can be handled by C<%SIG>
-or Event, but not both.
+documentation for C<%SIG>.
+
+A given signal can be handled by C<%SIG> or Event, but not both at the
+same time.  Event handles the signal as long as there is at least one
+active watcher. If all watchers for the signal are cancelled or
+stopped then Event sets the signal handler to SIG_DFL.
 
 =item suspend => $bool
 

@@ -13,7 +13,7 @@ use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX
 use vars qw($VERSION @EXPORT_OK
 	    $API $DebugLevel $Eval $DIED $Now);
-$VERSION = '0.87';
+$VERSION = '0.88';
 
 # If we inherit DynaLoader then we inherit AutoLoader; Bletch!
 require DynaLoader;
@@ -23,27 +23,40 @@ require DynaLoader;
 (defined(&bootstrap)? \&bootstrap : \&DynaLoader::bootstrap)->
     (__PACKAGE__, $VERSION);
 
-if (!cache_time_api()) {
-    eval { require Time::HiRes; };
-    if ($@ =~ /^Can\'t locate Time/) {
-	# just fake it up
-	install_time_api();
-    } elsif ($@) {
-	die if $@;
-    }
-    die "Can't find time API"
-	if !cache_time_api();
-}
-
-# broadcast_adjust for Time::Warp? XXX
-
 $DebugLevel = 0;
 $Eval = 0;		# avoid because c_callback is exempt
 $DIED = \&default_exception_handler;
+my $NO_TIME_HIRES = 0;
 
 @EXPORT_OK = qw(time all_events all_watchers all_running all_queued all_idle
 		one_event sweep loop unloop unloop_all sleep queue
-		QUEUES PRIO_NORMAL PRIO_HIGH);
+		QUEUES PRIO_NORMAL PRIO_HIGH NO_TIME_HIRES);
+
+sub import {
+  my $pkg = shift;
+  my @sym;
+  for my $sym (@_) {
+    if ($sym eq 'NO_TIME_HIRES') {
+      $NO_TIME_HIRES = 1;
+    } else {
+      push @sym, $sym;
+    }
+  }
+  $pkg->export_to_level(1, undef, @sym);
+}
+
+if (!$NO_TIME_HIRES) {
+    eval { require Time::HiRes; };
+    if ($@ =~ /^Can\'t locate Time/) {
+        # OK, just continue
+    } elsif ($@) {
+	die if $@;
+    } else {
+	cache_time_api();  # hook in high precision time
+    }
+}
+
+# broadcast_adjust for Time::Warp? XXX
 
 sub _load_watcher {
     my $sub = shift;
