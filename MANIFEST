@@ -7,7 +7,6 @@ MANIFEST
 MANIFEST.SKIP
 Makefile.PL
 README
-README.IRIX
 TODO
 Tutorial.pdf
 c/ev.c

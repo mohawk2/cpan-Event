@@ -1,3 +1,11 @@
+Tue Jan 22 12:20:24 2002  Joshua N Pritikin  <vishnu@pobox.com>
+
+	* Doc StarvePrio (Allen Smith <easmith@beatrice.rutgers.edu>).
+
+	* Remove IRIX special casing.  Reports indicate that new versions
+	of IRIX don't need any hacks. (Allen Smith
+	<easmith@beatrice.rutgers.edu>)
+
 2001-06-22  <vishnu@pobox.com>
 
 	* Release 0.83.

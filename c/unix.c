@@ -5,11 +5,6 @@
   poll and select scale poorly.
 */
 
-/* select() works better than poll() on IRIX */
-#ifdef sgi
-# undef HAS_POLL
-#endif
-
 static int pe_sys_fileno(SV *sv, char *context) {
     IO *io;
     PerlIO *fp;

@@ -95,6 +95,12 @@ Service the next idle watcher.
 
 =back
 
+StarvePrio is the priority level for which events are dispatched
+during step 2.  It cannot be changed without a recompile.  In the rare
+case that an event is always pending at step 2 then I/O watchers will
+starve.  However, this is highly unlikely since async watchers should
+never queue events so rapidly.
+
 =item all_watchers()
 
 Returns a list of all watchers (including stopped watchers).
@@ -744,17 +750,7 @@ Inline
 If you have insights or complaints then please subscribe to the
 mailing list!  Send email to:
 
-  majordomo@perl.org
-
-The body of your message should read: 
-
-  subscribe perl-loop
-
-This list is archived at
-
-  http://www.xray.mpe.mpg.de/mailing-lists/perl-loop/
-
-Thanks!
+  perl-loop-subscribe@perl.org
 
 =head1 AUTHOR
 
@@ -776,8 +772,11 @@ those lists below and folks mentioned in the ChangeLog.
 
 =head1 COPYRIGHT
 
-Copyright © 1997-2000 Joshua Nathaniel Pritikin & Graham Barr.  All
-rights reserved.  This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
+Copyright © 1997 Joshua Nathaniel Pritikin & Graham Barr
+
+Copyright © 1998, 1999, 2000, 2001, 2002 Joshua Nathaniel Pritikin
+
+All rights reserved.  This program is free software; you can
+redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut
