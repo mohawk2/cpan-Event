@@ -1,3 +1,11 @@
+2005-03-29    <joshua@always.joy.eth.net>
+
+	* Release 1.04.
+
+	* Preliminary /dev/poll support from Michael Pergament
+	<ESeifert@t-online.de>.  As of yet, there is no config test to
+	turn on this code.  Patches welcome.
+
 2005-01-31    <joshua@always.joy.eth.net>
 
 	* Release 1.03.

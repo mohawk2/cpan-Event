@@ -4,6 +4,9 @@ static pe_ring IOWatch;
 static int IOWatchCount;
 static int IOWatch_OK;
 
+static void pe_sys_io_add (pe_io *ev);
+static void pe_sys_io_del (pe_io *ev);
+
 static pe_watcher *pe_io_allocate(HV *stash, SV *temple) {
     pe_io *ev;
     EvNew(4, ev, 1, pe_io);
@@ -47,6 +50,7 @@ static char *pe_io_start(pe_watcher *_ev, int repeat) {
 	if (!ev->base.callback)
 	    return "without io callback";
 	PE_RING_UNSHIFT(&ev->ioring, &IOWatch);
+	pe_sys_io_add(ev);
 	++IOWatchCount;
 	IOWatch_OK = 0;
 	++ok;
@@ -70,6 +74,7 @@ static void pe_io_stop(pe_watcher *_ev) {
     pe_io *ev = (pe_io*) _ev;
     pe_timeable_stop(&ev->tm);
     if (!PE_RING_EMPTY(&ev->ioring)) {
+        pe_sys_io_del(ev);
 	PE_RING_DETACH(&ev->ioring);
 	--IOWatchCount;
 	IOWatch_OK = 0;

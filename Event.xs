@@ -296,6 +296,7 @@ BOOT:
   boot_idle();
   boot_timer();
   boot_io();
+  boot_devpoll();
   boot_var();
   boot_tied();
   boot_signal();
