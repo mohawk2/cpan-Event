@@ -1,0 +1,20 @@
+TYPEMAP
+
+pe_watcher *	O_WATCHER
+pe_event *	O_EVENT
+
+INPUT
+
+O_WATCHER
+	$var = ($type) sv_2watcher($arg)
+
+O_EVENT
+	$var = ($type) sv_2event($arg)
+
+OUTPUT
+
+O_WATCHER
+	croak("use watcher_2sv($var)")
+
+O_EVENT
+	croak("use event_2sv($var)")
