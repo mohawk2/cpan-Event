@@ -108,6 +108,12 @@ struct pe_ioevent {
     U16 got;
 };
 
+typedef struct pe_datafulevent pe_datafulevent;
+struct pe_datafulevent {
+    pe_event base;
+    SV *data;
+};
+
 typedef struct pe_idle pe_idle;
 struct pe_idle {
     pe_watcher base;
@@ -161,6 +167,19 @@ struct pe_group {
     SV *timeout;
     int members;
     pe_watcher **member;
+};
+
+typedef struct pe_generic pe_generic;
+struct pe_generic {
+    pe_watcher base;
+    SV *source;
+    pe_ring active;
+};
+
+typedef struct pe_genericsrc pe_genericsrc;
+struct pe_genericsrc {
+    SV *mysv;
+    pe_ring watchers;
 };
 
 typedef struct pe_event_stats_vtbl pe_event_stats_vtbl;

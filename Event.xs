@@ -277,6 +277,7 @@ double null_loops_per_second(int sec)
 #include "signal.c"
 #include "tied.c"
 #include "group.c"
+#include "generic.c"
 #include "queue.c"
 
 MODULE = Event		PACKAGE = Event
@@ -299,6 +300,7 @@ BOOT:
   boot_tied();
   boot_signal();
   boot_group();
+  boot_generic();
   boot_queue();
   {
       SV *apisv;
@@ -538,6 +540,13 @@ void
 pe_event::got()
 	PPCODE:
 	XPUSHs(sv_2mortal(events_mask_2sv(((pe_ioevent*)THIS)->got)));
+
+MODULE = Event		PACKAGE = Event::Event::Dataful
+
+void
+pe_event::data()
+	PPCODE:
+	XPUSHs(((pe_datafulevent*)THIS)->data);
 
 MODULE = Event		PACKAGE = Event::Event
 
@@ -942,3 +951,45 @@ pe_watcher::del(...)
 	PUTBACK;
 	_group_del(THIS, items == 2? sv_mortalcopy(ST(1)) : 0);
 	SPAGAIN;
+
+MODULE = Event		PACKAGE = Event::generic
+
+void
+allocate(clname, temple)
+     SV *clname;
+     SV *temple;
+     PPCODE:
+     XPUSHs(watcher_2sv(pe_generic_allocate(gv_stashsv(clname, 1),
+		SvRV(temple))));
+
+void
+pe_watcher::source(...)
+	PPCODE:
+	PUTBACK;
+	_generic_source(THIS, items == 2? sv_mortalcopy(ST(1)) : 0);
+	SPAGAIN;
+
+MODULE = Event		PACKAGE = Event::generic::Source
+
+void
+allocate(clname, temple)
+	SV *clname;
+	SV *temple;
+	PPCODE:
+	if (!SvROK(temple)) croak("Bad template");
+	XPUSHs(genericsrc_2sv(pe_genericsrc_allocate(gv_stashsv(clname, 1),
+			SvRV(temple))));
+
+void
+DESTROY(ref)
+	SV *ref;
+	CODE:
+{
+	pe_genericsrc_dtor(sv_2genericsrc(ref));
+}
+
+void
+pe_genericsrc::event(...)
+	PPCODE:
+	pe_genericsrc_event(THIS,
+		items >= 2 ? sv_mortalcopy(ST(1)) : &PL_sv_undef);

@@ -6,7 +6,7 @@ static double QueueTime[PE_QUEUES];
 static pe_cbframe CBFrame[MAX_CB_NEST];
 static int CurCBFrame = -1;
 
-pe_event_vtbl event_vtbl, ioevent_vtbl;
+pe_event_vtbl event_vtbl, ioevent_vtbl, datafulevent_vtbl;
 
 static void pe_anyevent_init(pe_event *ev, pe_watcher *wa) {
     assert(wa);
@@ -140,6 +140,42 @@ EKEYMETH(_event_got) {
 	PUTBACK;
     } else
 	croak("'e_got' is read-only");
+}
+
+/*------------------------------------------------------*/
+
+static pe_event *pe_datafulevent_allocate(pe_watcher *wa) {
+    pe_datafulevent *ev;
+    assert(wa);
+    if (PE_RING_EMPTY(&datafulevent_vtbl.freelist)) {
+	EvNew(15, ev, 1, pe_datafulevent);
+	ev->base.vtbl = &datafulevent_vtbl;
+	PE_RING_INIT(&ev->base.que, ev);
+    } else {
+	pe_ring *lk = datafulevent_vtbl.freelist.prev;
+	PE_RING_DETACH(lk);
+	ev = (pe_datafulevent*) lk->self;
+    }
+    pe_anyevent_init(&ev->base, wa);
+    ev->data = &PL_sv_undef;
+    return &ev->base;
+}
+
+static void pe_datafulevent_dtor(pe_event *ev) {
+    pe_datafulevent *de = (pe_datafulevent *)ev;
+    SvREFCNT_dec(de->data);
+    pe_anyevent_dtor(ev);
+    PE_RING_UNSHIFT(&ev->que, &datafulevent_vtbl.freelist);
+}
+
+EKEYMETH(_event_data) {
+    pe_datafulevent *de = (pe_datafulevent *)ev;
+    if (!nval) {
+	dSP;
+	XPUSHs(de->data);
+	PUTBACK;
+    } else
+	croak("'e_data' is read-only");
 }
 
 /*------------------------------------------------------*/
@@ -316,6 +352,13 @@ static void boot_pe_event() {
     vt->stash = gv_stashpv("Event::Event::Io", 1);
     vt->new_event = pe_ioevent_allocate;
     vt->dtor = pe_ioevent_dtor;
+    PE_RING_INIT(&vt->freelist, 0);
+
+    vt = &datafulevent_vtbl;
+    memcpy(vt, &event_vtbl, sizeof(pe_event_vtbl));
+    vt->stash = gv_stashpv("Event::Event::Dataful", 1);
+    vt->new_event = pe_datafulevent_allocate;
+    vt->dtor = pe_datafulevent_dtor;
     PE_RING_INIT(&vt->freelist, 0);
 
     memset(QueueTime, 0, sizeof(QueueTime));

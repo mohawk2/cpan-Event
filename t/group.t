@@ -8,10 +8,10 @@ my $gp = Event->group(timeout => 5, cb => \&die);
 
 my $undef;
 eval { $gp->add(\$undef) };
-ok $@, '/not a watcher/';
+ok $@, '/not a thing/';
 
 eval { $gp->add(\$gp) };
-ok $@, '/not a watcher/';
+ok $@, '/not a thing/';
 
 eval { $gp->add($gp) };
 ok $@, '/itself/';

@@ -48,14 +48,20 @@ A watcher can be switched between active and inactive states. When
 inactive, it does not generate target events.
 
 Some types of source event are not reified as target events immediately.
-Signals received, for example, are merely counted initially. The
+Signals received, for example, are counted initially. The
 counted signals are reified at certain execution points.
 Hence, signal events may be processed out of order, and if handled
 carelessly, on the wrong side of a state change in event handling.
 A useful way to view this is that occurrence of the source
-event is not actually the arrival of the signal but triggers a
-counting of the signal. Source events generate target events on
-a schedule that depends on the operation of the event loop.
+event is not actually the arrival of the signal but is triggered by the
+counting of the signal.
+
+Reification can be forced when necessary.
+The schedule on which some other events are created is
+non-obvious.  This is especially the case with watchers that
+watch for a condition rather than an event.  In some cases,
+target events are generated on a schedule that depends on the
+operation of the event loop.
 
 =head1 PERL API
 
@@ -158,12 +164,14 @@ its C<max> wait time is exceeded.
 =item queue_pending()
 
 Examines asynchronous source events (timers & signals) and reifies
-them as target events.  Signals are handled according to the watchers
-which are active at the time that this is done rather than at the time
-the signal is received.
+them as target events. C<queue_pending()> is only called implicitly by
+C<sweep()> and C<one_event()>.  Otherwise, C<queue_pending()> is not
+called implicitly.
 
-Think hard before you use C<queue_pending()>.  Use of this API may
-indicate that your program is poorly designed.
+NOTE: Signal watchers generate target events according to which
+watchers are active at the time that C<queue_pending()> is called
+rather than according to the time the signal is received.  This is
+best explained by example.  See the file C<demo/queue_pending.t>.
 
 =back
 
@@ -218,14 +226,16 @@ always invoke C<start()> unless the C<< parked=>1 >> option is requested.
 You will need to set the parked option if you preallocate unconfigured
 watchers.
 
-Note: If there are any unreified asynchronous events that are of interest
-to the watcher then it will see these events even though they happened before
-it was started.  This affects signal watchers, but there will only be
-existing unreified signal events if Event was already handling the signal,
-which it would only do if there were another active watcher for the same
-signal.  If this situation occurs and it would be a problem for
-the new watcher to see older events then call C<queue_pending()>
-prior to starting the new watcher in order to reify any outstanding events.
+Note: If there are any unreified asynchronous events that are of
+interest to the watcher, it will see these events even though they
+happened before it was started.  This affects signal watchers, but
+there will only be existing unreified signal events if Event was
+already handling the signal, which it would only do if there were
+another active watcher for the same signal.  If this situation might
+occur, and it would be a problem for the new watcher to see older
+events, call C<queue_pending()> immediately before starting the new
+watcher in order to reify any outstanding events.  This explaination
+may be more clear if read along with C<demo/queue_pending.t>.
 
 =item $watcher->again
 
@@ -293,8 +303,7 @@ a list of all the watcher's pending events.
 
 Note that this does not check for unreified asynchronous events.  Call
 C<queue_pending()> first if you want to see signals received since the
-last operation of the event loop.  Even so, calling C<queue_pendig()>
-does not prevent a race condition -- it just makes it less likely.
+last operation of the event loop.
 
 =back
 
@@ -842,8 +851,6 @@ mailing list!  Send email to:
 =head1 AUTHOR
 
 Joshua N. Pritikin E<lt>F<jpritikin@pobox.com>E<gt>
-
-For my motivation, see http://why-compete.org
 
 =head1 ACKNOWLEDGMENT
 

@@ -1,6 +1,4 @@
-#define MG_PRIVATE_CODE ((((unsigned)'e')<<8) + (unsigned)'v')
-
-static SV *wrap_watcher(void *ptr, HV *stash, SV *temple) {
+static SV *wrap_thing(U16 mgcode, void *ptr, HV *stash, SV *temple) {
     SV *ref;
     MAGIC **mgp;
     MAGIC *mg;
@@ -28,10 +26,37 @@ static SV *wrap_watcher(void *ptr, HV *stash, SV *temple) {
     Zero(mg, 1, MAGIC);
     mg->mg_type = '~';
     mg->mg_obj = (SV*) ptr;  /* NOT refcnt'd */
-    mg->mg_private = MG_PRIVATE_CODE;
+    mg->mg_private = mgcode;
     *mgp = mg;
 
     return ref;
+}
+
+static void* sv_2thing(U16 mgcode, SV *sv) {
+    MAGIC *mg;
+    SV *origsv = sv;
+    if (!sv || !SvROK(sv))
+	croak("sv_2thing: not a reference?");
+    sv = SvRV(sv);
+    if (SvTYPE(sv) < SVt_PVMG)
+	croak("sv_2thing: not a thing");
+    if (!SvOBJECT(sv))
+	croak("sv_2thing: not an object");
+    mg = mg_find(sv, '~');
+    if (mg) {
+	if (mg->mg_private != mgcode) {
+	    croak("Can't find event magic (SV=0x%x)", sv);
+	}
+	return (void*) mg->mg_obj;
+    }
+    croak("sv_2thing: can't decode SV=0x%x", origsv);
+    return 0;
+}
+
+#define MG_WATCHER_CODE ((((unsigned)'e')<<8) + (unsigned)'v')
+
+static SV *wrap_watcher(void *ptr, HV *stash, SV *temple) {
+    return wrap_thing(MG_WATCHER_CODE, ptr, stash, temple);
 }
 
 SV *watcher_2sv(pe_watcher *wa) { /**SLOW IS OKAY**/
@@ -48,24 +73,26 @@ SV *watcher_2sv(pe_watcher *wa) { /**SLOW IS OKAY**/
 }
 
 void* sv_2watcher(SV *sv) {
-    MAGIC *mg;
-    SV *origsv = sv;
-    if (!sv || !SvROK(sv))
-	croak("sv_2watcher: not a reference?");
-    sv = SvRV(sv);
-    if (SvTYPE(sv) < SVt_PVMG)
-	croak("sv_2watcher: not a watcher");
-    if (!SvOBJECT(sv))
-	croak("sv_2watcher: not an object");
-    mg = mg_find(sv, '~');
-    if (mg) {
-	if (mg->mg_private != MG_PRIVATE_CODE) {
-	    croak("Can't find event magic (SV=0x%x)", sv);
-	}
-	return (void*) mg->mg_obj;
+    return sv_2thing(MG_WATCHER_CODE, sv);
+}
+
+#define MG_GENERICSRC_CODE 2422 /* randomly chosen */
+
+static SV *wrap_genericsrc(void *ptr, HV *stash, SV *temple) {
+    return wrap_thing(MG_GENERICSRC_CODE, ptr, stash, temple);
+}
+
+static HV *pe_genericsrc_stash;
+
+static SV *genericsrc_2sv(pe_genericsrc *src) { /**SLOW IS OKAY**/
+    if (!src->mysv) {
+	src->mysv = wrap_genericsrc(src, pe_genericsrc_stash, 0);
     }
-    croak("sv_2watcher: can't decode SV=0x%x", origsv);
-    return 0;
+    return SvREFCNT_inc(sv_2mortal(src->mysv));
+}
+
+static void* sv_2genericsrc(SV *sv) {
+    return sv_2thing(MG_GENERICSRC_CODE, sv);
 }
 
 /*

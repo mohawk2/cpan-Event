@@ -1,3 +1,13 @@
+2004-12-08    <joshua@always.joy.eth.net>
+
+	* Release 1.02.
+
+2004-12-08    Zefram <zefram@fysh.org>
+
+	* Generic watchers: implementation, documentation, and tests.
+	
+	* Documentation refinements.
+
 2004-11-29    <joshua@always.joy.eth.net>
 
 	* Release 1.01.
