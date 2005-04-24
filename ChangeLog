@@ -1,3 +1,10 @@
+2005-04-23    <joshua@always.joy.eth.net>
+
+	* Release 1.05.
+
+	* Fix ancient memory leak in loop() noticed by Nikita Savin
+	<nik@asdfgroup.com>.
+
 2005-03-29    <joshua@always.joy.eth.net>
 
 	* Release 1.04.

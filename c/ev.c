@@ -299,22 +299,25 @@ static void pe_event_invoke(pe_event *ev) {
     if (EvPERLCB(ev)) {
 	SV *cb = SvRV((SV*)ev->callback);
 	int pcflags = G_VOID | (SvIVX(Eval)? G_EVAL : 0);
-	dSP;
+	int retcnt;
 	SV *evsv = event_2sv(ev);
+	dSP;
+	PUSHMARK(SP);
 	if (SvTYPE(cb) == SVt_PVCV) {
-	    PUSHMARK(SP);
 	    XPUSHs(evsv);
 	    PUTBACK;
-	    perl_call_sv((SV*) ev->callback, pcflags);
+	    retcnt = perl_call_sv((SV*) ev->callback, pcflags);
 	} else {
 	    AV *av = (AV*)cb;
 	    assert(SvTYPE(cb) == SVt_PVAV);
-	    PUSHMARK(SP);
 	    XPUSHs(*av_fetch(av, 0, 0));
 	    XPUSHs(evsv);
 	    PUTBACK;
-	    perl_call_method(SvPV(*av_fetch(av, 1, 0),n_a), pcflags);
+	    retcnt = perl_call_method(SvPV(*av_fetch(av, 1, 0),n_a), pcflags);
 	}
+	SPAGAIN;
+	SP -= retcnt;
+	PUTBACK;
 	if (SvTRUE(ERRSV)) {
 	    if (pcflags & G_EVAL)
 		pe_callback_died(frp);
