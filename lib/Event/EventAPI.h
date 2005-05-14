@@ -22,7 +22,7 @@ struct pe_watcher {
     void *callback;
     void *ext_data;
     void *stats;
-    IV running; /* SAVEINT */
+    int running; /* SAVEINT */
     U32 flags;
     SV *desc;
     pe_ring all;	/* all watchers */
