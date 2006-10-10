@@ -8,13 +8,13 @@ BEGIN {  # do the right thing for threads?
 }
 
 package Event;
-require 5.6.0;  #maybe
+require 5.006;  #maybe
 use base 'Exporter';
 use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX
 use vars qw($VERSION @EXPORT_OK
 	    $API $DebugLevel $Eval $DIED $Now);
-$VERSION = '1.06';
+$VERSION = '1.07';
 
 # If we inherit DynaLoader then we inherit AutoLoader; Bletch!
 require DynaLoader;

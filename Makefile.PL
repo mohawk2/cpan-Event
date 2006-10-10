@@ -4,6 +4,8 @@ require 5.005; #most likely
 
 use ExtUtils::MakeMaker;
 
+#push @Safe, OPTIMIZE => '-Wall' if 1;
+
 # Parasoft's Insure++!
 push @Safe, OPTIMIZE => '-g' if 0;
 push @Safe, CC => 'insure', LD => 'insure', OPTIMIZE => '-g' if 0;

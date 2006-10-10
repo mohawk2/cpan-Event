@@ -99,7 +99,6 @@ static char *pe_var_start(pe_watcher *_ev, int repeat) {
 static void pe_var_stop(pe_watcher *_ev) {
     MAGIC **mgp;
     MAGIC *mg;
-    MAGIC *mgtmp;
     pe_var *ev = (pe_var*) _ev;
     SV *sv = SvRV(ev->variable);
 

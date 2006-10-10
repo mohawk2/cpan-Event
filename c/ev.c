@@ -233,7 +233,6 @@ static void _resume_watcher(void *vp) {
 
 static void pe_check_recovery() {
     /* NO ASSERTIONS HERE!  EVAL CONTEXT IS VERY MESSY */
-    pe_watcher *ev;
     int alert;
     struct pe_cbframe *fp;
     if (CurCBFrame < 0)

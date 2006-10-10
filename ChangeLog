@@ -1,3 +1,10 @@
+2006-10-10    <joshua@always.joy.eth.net>
+
+	* Release 1.07.
+	
+	* Marc Lehmann <schmorp@schmorp.de> suggests using mg_ptr instead
+	of mg_obj. Sounds good to me.
+
 2005-05-14    <joshua@always.joy.eth.net>
 
 	* Release 1.06.

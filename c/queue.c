@@ -2,7 +2,6 @@ static pe_ring NQueue;
 static int StarvePrio = PE_QUEUES - 2;
 
 static void boot_queue() {
-    int xx;
     HV *stash = gv_stashpv("Event", 1);
     PE_RING_INIT(&NQueue, 0);
     newCONSTSUB(stash, "QUEUES", newSViv(PE_QUEUES));

@@ -25,7 +25,7 @@ static SV *wrap_thing(U16 mgcode, void *ptr, HV *stash, SV *temple) {
     New(0, mg, 1, MAGIC);
     Zero(mg, 1, MAGIC);
     mg->mg_type = '~';
-    mg->mg_obj = (SV*) ptr;  /* NOT refcnt'd */
+    mg->mg_ptr = (char*) ptr;  /* NOT refcnt'd */
     mg->mg_private = mgcode;
     *mgp = mg;
 
@@ -47,7 +47,7 @@ static void* sv_2thing(U16 mgcode, SV *sv) {
 	if (mg->mg_private != mgcode) {
 	    croak("Can't find event magic (SV=0x%x)", sv);
 	}
-	return (void*) mg->mg_obj;
+	return (void*) mg->mg_ptr;
     }
     croak("sv_2thing: can't decode SV=0x%x", origsv);
     return 0;
@@ -165,7 +165,6 @@ int sv_2interval(char *label, SV *in, double *out) {
 }
 
 SV* events_mask_2sv(int mask) {
-    STRLEN len;
     SV *ret = newSV(0);
     SvUPGRADE(ret, SVt_PVIV);
     sv_setpvn(ret, "", 0);

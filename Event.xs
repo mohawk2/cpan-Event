@@ -461,7 +461,6 @@ queue(...)
 	PREINIT:
 	pe_watcher *wa;
 	pe_event *ev;
-	int cnt = 1;
 	PPCODE:
 	wa = (pe_watcher*) sv_2watcher(ST(0));
 	if (items == 1) {
