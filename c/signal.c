@@ -66,7 +66,7 @@ static char *pe_signal_start(pe_watcher *_ev, int repeat) {
     if (sig == 0)
 	return "without signal";
     if (PE_RING_EMPTY(&Sigring[sig]))
-	rsignal(sig, process_sighandler);
+	rsignal(sig, (Sighandler_t)process_sighandler);
     PE_RING_UNSHIFT(&ev->sring, &Sigring[sig]);
     return 0;
 }
@@ -76,7 +76,7 @@ static void pe_signal_stop(pe_watcher *_ev) {
     int sig = ev->signal;
     PE_RING_DETACH(&ev->sring);
     if (PE_RING_EMPTY(&Sigring[sig])) {
-	rsignal(sig, SIG_DFL);
+	rsignal(sig, (Sighandler_t)SIG_DFL);
         Sigstat[0].hits[sig] = 0;
         Sigstat[1].hits[sig] = 0;
     }

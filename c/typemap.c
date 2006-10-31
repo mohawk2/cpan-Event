@@ -106,7 +106,7 @@ SV *event_2sv(pe_event *ev) { /**MAKE FAST**/
 	SV *rv = newSV(0);
 	SV *sv = newSVrv(rv,0);
 	sv_bless(rv, ev->vtbl->stash);
-	sv_setiv(sv, (IV)ev);
+	sv_setiv(sv, PTR2IV(ev));
 	ev->mysv = rv;
 
 	if (WaDEBUGx(ev->up) >= 4) {
@@ -123,7 +123,7 @@ void *sv_2event(SV *sv) {
     assert(sv);
     assert(SvROK(sv));
     sv = SvRV(sv);
-    ptr = (void*) SvIV(sv);
+    ptr = INT2PTR(void *, SvIV(sv));
     assert(ptr);
     return ptr;
 }

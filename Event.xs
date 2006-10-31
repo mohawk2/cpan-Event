@@ -395,7 +395,7 @@ cache_time_api()
 	SV **svp = hv_fetch(PL_modglobal, "Time::NVtime", 12, 0);
 	if (!svp || !*svp || !SvIOK(*svp))
 	    XSRETURN_NO;
-	api.NVtime = (double(*)()) SvIV(*svp);
+	api.NVtime = INT2PTR(double(*)(), SvIV(*svp));
 	XSRETURN_YES;
 
 double

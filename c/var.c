@@ -48,9 +48,9 @@ static void pe_tracevar(pe_watcher *wa, SV *sv, int got) {
 }
 
 static I32 tracevar_r(pTHX_ IV ix, SV *sv)
-{ pe_tracevar((pe_watcher *)ix, sv, PE_R); return 0; /*ignored*/ }
+{ pe_tracevar(INT2PTR(pe_watcher *, ix), sv, PE_R); return 0; /*ignored*/ }
 static I32 tracevar_w(pTHX_ IV ix, SV *sv)
-{ pe_tracevar((pe_watcher *)ix, sv, PE_W); return 0; /*ignored*/ }
+{ pe_tracevar(INT2PTR(pe_watcher *, ix), sv, PE_W); return 0; /*ignored*/ }
 
 static char *pe_var_start(pe_watcher *_ev, int repeat) {
     STRLEN n_a;
@@ -86,7 +86,7 @@ static char *pe_var_start(pe_watcher *_ev, int repeat) {
     EvNew(8, ufp, 1, struct ufuncs);
     ufp->uf_val = ev->events & PE_R? tracevar_r : 0;
     ufp->uf_set = ev->events & PE_W? tracevar_w : 0;
-    ufp->uf_index = (IV) ev;
+    ufp->uf_index = PTR2IV(ev);
     mg->mg_ptr = (char *) ufp;
     mg->mg_obj = (SV*) ev;
 

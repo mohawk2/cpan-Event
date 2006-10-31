@@ -2,3 +2,4 @@
 Makefile(\.old)?$
 \.rej$
 ^\.i.*$
+^\.git$
