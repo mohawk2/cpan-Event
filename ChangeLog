@@ -1,3 +1,10 @@
+2007-05-21    <joshua@always.joy.eth.net>
+
+	* Event is now stored in GIT. You can grab a copy with "git clone
+	git://nirmalvihar.info/home/joshua/event.git".  I will not be
+	updating this ChangeLog anymore because the full history plus
+	changelog will be stored in GIT.
+
 2006-10-11    <joshua@always.joy.eth.net>
 
 	* Add casts to quell warnings as suggested by JDHEDDEN@cpan.org.
