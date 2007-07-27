@@ -1,5 +1,6 @@
 # -*-perl-*- i/o
 
+use Config;
 BEGIN {
     if ($^O eq 'MSWin32') {
 	print "1..0\n";
@@ -84,6 +85,6 @@ Event->io(timeout => 2, repeat => 0,
 
 loop();
 
-ok $noticed_bogus_fd, 1;
-ok !defined $bogus->fd;
+skip $Config{osname} eq 'darwin', $noticed_bogus_fd, 1;
+skip $Config{osname} eq 'darwin', !defined $bogus->fd;
 ok $bogus_timeout > 0;
