@@ -1,6 +1,6 @@
 # This -*- perl -*- script makes the Makefile
 
-require 5.005; #most likely
+require 5.006; # 5.005_005 fails
 
 use ExtUtils::MakeMaker;
 
