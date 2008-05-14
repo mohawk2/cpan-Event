@@ -17,6 +17,7 @@ c/watcher.c
 ChangeLog
 demo/echo.t
 demo/group.t
+demo/idle2.t
 demo/msg.pm
 demo/perlqt.t
 demo/process.pm
@@ -60,7 +61,6 @@ t/group.t
 t/hook.t
 t/hup.t
 t/idle.t
-t/idle2.t
 t/io.t
 t/leak.t
 t/leak2.t

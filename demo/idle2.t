@@ -1,5 +1,8 @@
 # idle daydreams -*-perl-*-
 
+# This test is too sensitive to slight variations in timing
+# to serve as part of the test suite.
+
 BEGIN {
     eval {
 	require Time::HiRes;
