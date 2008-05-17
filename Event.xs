@@ -559,7 +559,8 @@ DESTROY(ref)
 	if (WaDEBUGx(THIS) >= 3) {
 	    STRLEN n_a;
 	    warn("Event=0x%x '%s' DESTROY SV=0x%x",
-		 THIS, SvPV(THIS->up->desc, n_a), SvRV(THIS->mysv));
+		 THIS, SvPV(THIS->up->desc, n_a),
+		 THIS->mysv? SvRV(THIS->mysv) : 0);
 	}
 	(*THIS->vtbl->dtor)(THIS);
 }

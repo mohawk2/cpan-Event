@@ -3,29 +3,30 @@ static pe_timeable Timeables;
 /*#define D_TIMEABLE(x) x /**/
 #define D_TIMEABLE(x) /**/
 
-/* BROQ
 static void db_show_timeables()
 {
-  pe_tmevent *ev;
-  ev = (pe_tmevent*) Timeables.next->self;
-  while (ev) {
-    warn("  %.2f : %s\n", ev->tm.at, SvPV(ev->base.desc, na));
-    ev = (pe_tmevent*) ev->tm.ring.next->self;
+  pe_timeable *tm = (pe_timeable*) Timeables.ring.next;
+  warn("timeables at %.2f\n", NVtime() + IntervalEpsilon);
+  while (tm->ring.self) {
+    STRLEN n_a;
+    pe_watcher *wa = (pe_watcher*) tm->ring.self;
+    pe_timeable *next = (pe_timeable*) tm->ring.next;
+    warn("  %.2f '%s'\n", tm->at, SvPV(wa->desc, n_a));
+    tm = next;
   }
 }
-*/
 
 static void pe_timeables_check() {
     pe_timeable *tm = (pe_timeable*) Timeables.ring.next;
     double now = NVtime() + IntervalEpsilon;
-    /*  warn("timeables at %.2f\n", now); db_show_timeables();/**/
+    /*db_show_timeables();/**/
     while (tm->ring.self && now >= tm->at) {
 	pe_watcher *ev = (pe_watcher*) tm->ring.self;
 	pe_timeable *next = (pe_timeable*) tm->ring.next;
 	D_TIMEABLE({
 	    if (WaDEBUGx(ev) >= 4) {
 		STRLEN n_a;
-		warn("Event: timeable expire '%s'\n", SvPV(ev->base.desc, n_a));
+		warn("Event: timeable expire '%s'\n", SvPV(ev->desc, n_a));
 	    }
 	})
 	    assert(!WaSUSPEND(ev));
@@ -65,6 +66,7 @@ static void pe_timeable_start(pe_timeable *tm) {
     /*warn("T:\n"); db_show_timeables();/**/
     D_TIMEABLE({
 	if (WaDEBUGx(ev) >= 4) {
+	    STRLEN n_a;
 	    warn("Event: timeable start '%s'\n", SvPV(ev->desc, n_a));
 	}
     })
