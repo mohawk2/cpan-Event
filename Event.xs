@@ -118,7 +118,7 @@ static void Event_croak(const char* pat, ...) {
 
 /* Is time() portable everywhere?  Hope so!  XXX */
 
-static double fallback_NVtime()
+static NV fallback_NVtime()
 { return time(0); }
 
 #include "Event.h"
@@ -150,7 +150,7 @@ static pe_event_stats_vtbl Estat;
 /* IntervalEpsilon should be equal to the clock's sleep resolution
    (poll or select) times two.  It probably needs to be bigger if you turn
    on lots of debugging?  Can determine this dynamically? XXX */
-static double IntervalEpsilon = 0.0002;
+static NV IntervalEpsilon = 0.0002;
 static int TimeoutTooEarly=0;
 
 static struct EventAPI api;
@@ -210,14 +210,14 @@ static void pe_collect_stats(int yes) {
 }
 
 #ifdef HAS_GETTIMEOFDAY
-double null_loops_per_second(int sec)
+NV null_loops_per_second(int sec)
 {
 	/*
 	  This should be more realistic.  It is used to normalize
 	  the benchmark against some theoretical perfect event loop.
 	*/
 	struct timeval start_tm, done_tm;
-	double elapse;
+	NV elapse;
 	unsigned count=0;
 	int fds[2];
 	if (pipe(fds) != 0) croak("pipe");
@@ -259,7 +259,7 @@ double null_loops_per_second(int sec)
 return count/sec;
 }
 #else /* !HAS_GETTIMEOFDAY */
-double null_loops_per_second(int sec)
+NV null_loops_per_second(int sec)
 { croak("sorry, gettimeofday is not available"); }
 #endif
 
@@ -395,10 +395,10 @@ cache_time_api()
 	SV **svp = hv_fetch(PL_modglobal, "Time::NVtime", 12, 0);
 	if (!svp || !*svp || !SvIOK(*svp))
 	    XSRETURN_NO;
-	api.NVtime = INT2PTR(double(*)(), SvIV(*svp));
+	api.NVtime = INT2PTR(NV(*)(), SvIV(*svp));
 	XSRETURN_YES;
 
-double
+NV
 time()
 	PROTOTYPE:
 	CODE:
@@ -408,12 +408,12 @@ time()
 
 void
 sleep(tm)
-	double tm;
+	NV tm;
 	PROTOTYPE: $
 	CODE:
 	pe_sys_sleep(tm);
 
-double
+NV
 null_loops_per_second(sec)
 	int sec
 
@@ -484,7 +484,7 @@ int
 one_event(...)
 	PROTOTYPE: ;$
 	CODE:
-	double maxtm = 60;
+	NV maxtm = 60;
 	if (items == 1) maxtm = SvNV(ST(0));
 	RETVAL = safe_one_event(maxtm);
 	OUTPUT:
@@ -524,7 +524,7 @@ void
 queue_time(prio)
 	int prio
 	PPCODE:
-	double max=0;
+	NV max=0;
 	int xx;
 	if (prio < 0 || prio >= PE_QUEUES)
 	  croak("queue_time(%d) out of domain [0..%d]",

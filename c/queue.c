@@ -94,7 +94,7 @@ static int pe_empty_queue(int maxprio) { /**INVOKE**/
     return 0;
 }
 
-/*inline*/ static void pe_multiplex(double tm) {
+/*inline*/ static void pe_multiplex(NV tm) {
     if (SvIVX(DebugLevel) >= 2) {
 	warn("Event: multiplex %.4fs %s%s\n", tm,
 	     PE_RING_EMPTY(&NQueue)?"":"QUEUE",
@@ -109,12 +109,12 @@ static int pe_empty_queue(int maxprio) { /**INVOKE**/
     }
 }
 
-static double pe_map_prepare(double tm) {
+static NV pe_map_prepare(NV tm) {
     pe_qcallback *qcb = (pe_qcallback*) Prepare.prev->self;
     while (qcb) {
 	if (qcb->is_perl) {
 	    SV *got;
-	    double when;
+	    NV when;
 	    dSP;
 	    PUSHMARK(SP);
 	    PUTBACK;
@@ -126,7 +126,7 @@ static double pe_map_prepare(double tm) {
 	    if (when < tm) tm = when;
 	}
 	else { /* !is_perl */
-	    double got = (* (double(*)(void*)) qcb->callback)(qcb->ext_data);
+	    NV got = (* (NV(*)(void*)) qcb->callback)(qcb->ext_data);
 	    if (got < tm) tm = got;
 	}
 	qcb = (pe_qcallback*) qcb->ring.prev->self;
@@ -135,7 +135,7 @@ static double pe_map_prepare(double tm) {
 }
 
 static void pe_queue_pending() {
-    double tm = 0;
+    NV tm = 0;
     if (!PE_RING_EMPTY(&Prepare)) tm = pe_map_prepare(tm);
 
     pe_multiplex(0);
@@ -147,7 +147,7 @@ static void pe_queue_pending() {
     if (!PE_RING_EMPTY(&AsyncCheck)) pe_map_check(&AsyncCheck);
 }
 
-static int one_event(double tm) {  /**INVOKE**/
+static int one_event(NV tm) {  /**INVOKE**/
     /*if (SvIVX(DebugLevel) >= 4)
       warn("Event: ActiveWatchers=%d\n", ActiveWatchers); /**/
 
@@ -160,7 +160,7 @@ static int one_event(double tm) {  /**INVOKE**/
 	tm = 0;
     }
     else {
-	double t1 = timeTillTimer();
+	NV t1 = timeTillTimer();
 	if (t1 < tm) tm = t1;
     }
     if (!PE_RING_EMPTY(&Prepare)) tm = pe_map_prepare(tm);
@@ -227,7 +227,7 @@ static void pe_reentry() {
     }
 }
 
-static int safe_one_event(double maxtm) {
+static int safe_one_event(NV maxtm) {
     int got;
     pe_check_recovery();
     pe_reentry();

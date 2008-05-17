@@ -18,7 +18,7 @@ static void db_show_timeables()
 
 static void pe_timeables_check() {
     pe_timeable *tm = (pe_timeable*) Timeables.ring.next;
-    double now = NVtime() + IntervalEpsilon;
+    NV now = NVtime() + IntervalEpsilon;
     /*db_show_timeables();/**/
     while (tm->ring.self && now >= tm->at) {
 	pe_watcher *ev = (pe_watcher*) tm->ring.self;
@@ -37,7 +37,7 @@ static void pe_timeables_check() {
     }
 }
 
-static double timeTillTimer() {
+static NV timeTillTimer() {
     pe_timeable *tm = (pe_timeable*) Timeables.ring.next;
     if (!tm->ring.self)
 	return 3600;
@@ -51,7 +51,7 @@ static void pe_timeable_start(pe_timeable *tm) {
     assert(!WaSUSPEND(ev));
     assert(PE_RING_EMPTY(&tm->ring));
     if (WaDEBUGx(ev)) {
-	double left = tm->at - NVtime();
+	NV left = tm->at - NVtime();
 	if (left < 0) {
 	    STRLEN n_a;
 	    warn("Event: timer for '%s' set to expire immediately (%.2f)",
@@ -83,7 +83,7 @@ static void pe_timeable_stop(pe_timeable *tm) {
     PE_RING_DETACH(&tm->ring);
 }
 
-static void pe_timeable_adjust(double delta) {
+static void pe_timeable_adjust(NV delta) {
     pe_timeable *rg = (pe_timeable*) Timeables.ring.next;
     while (rg != &Timeables) {
 	rg->at += delta;

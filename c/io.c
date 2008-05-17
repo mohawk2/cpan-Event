@@ -83,8 +83,8 @@ static void pe_io_stop(pe_watcher *_ev) {
 
 static void pe_io_alarm(pe_watcher *_wa, pe_timeable *hit) {
     pe_io *wa = (pe_io*) _wa;
-    double now = NVtime();
-    double left = (_wa->cbtime + wa->timeout) - now;
+    NV now = NVtime();
+    NV left = (_wa->cbtime + wa->timeout) - now;
     if (left < IntervalEpsilon) {
 	pe_ioevent *ev;
 	if (WaREPEAT(wa)) {

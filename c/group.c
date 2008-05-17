@@ -31,7 +31,7 @@ static void pe_group_dtor(pe_watcher *ev) {
 
 static char *pe_group_start(pe_watcher *ev, int repeat) {
     pe_group *gp = (pe_group*) ev;
-    double timeout;
+    NV timeout;
 
     if (!ev->callback)
 	return "without callback";
@@ -50,9 +50,9 @@ static void pe_group_stop(pe_watcher *ev)
 static void pe_group_alarm(pe_watcher *wa, pe_timeable *tm) {
     STRLEN n_a;
     pe_group *gp = (pe_group*) wa;
-    double timeout;
-    double remaining;
-    double now = NVtime();
+    NV timeout;
+    NV remaining;
+    NV now = NVtime();
     int xx;
     for (xx=0; xx < gp->members; xx++) {
 	pe_watcher *mb = gp->member[xx];

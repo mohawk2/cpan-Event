@@ -18,7 +18,7 @@ struct pe_ring { void *self; pe_ring *next, *prev; };
 struct pe_watcher {
     pe_watcher_vtbl *vtbl;
     SV *mysv;
-    double cbtime; /* float? XXX */
+    NV cbtime; /* float? XXX */
     void *callback;
     void *ext_data;
     void *stats;
@@ -51,7 +51,7 @@ struct pe_event {
 typedef struct pe_timeable pe_timeable;
 struct pe_timeable {
     pe_ring ring;
-    double at;
+    NV at;
 };
 
 typedef struct pe_qcallback pe_qcallback;
@@ -162,7 +162,7 @@ struct pe_var {
 typedef struct pe_group pe_group;
 struct pe_group {
     pe_watcher base;
-    double since;
+    NV since;
     pe_timeable tm;
     SV *timeout;
     int members;
@@ -216,7 +216,7 @@ struct EventAPI {
     pe_signal   *(*new_signal)(HV*, SV*);
 
     /* TIMEABLE */
-    double (*NVtime)();
+    NV (*NVtime)();
     void (*tstart)(pe_timeable *);
     void (*tstop)(pe_timeable *);
 
@@ -234,7 +234,7 @@ struct EventAPI {
     void *(*sv_2watcher)(SV *sv);
     SV   *(*event_2sv)(pe_event *ev);
     void *(*sv_2event)(SV *sv);
-    int   (*sv_2interval)(char *label, SV *in, double *out);
+    int   (*sv_2interval)(char *label, SV *in, NV *out);
     SV   *(*events_mask_2sv)(int mask);
     int   (*sv_2events_mask)(SV *sv, int bits);
 

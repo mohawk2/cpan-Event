@@ -131,9 +131,9 @@ void *sv_2event(SV *sv) {
 /***************************************************************/
 
 #define VERIFYINTERVAL(name, f) \
- STMT_START { double ign; sv_2interval(name, f, &ign); } STMT_END
+ STMT_START { NV ign; sv_2interval(name, f, &ign); } STMT_END
 
-int sv_2interval(char *label, SV *in, double *out) {
+int sv_2interval(char *label, SV *in, NV *out) {
     SV *sv = in;
     if (!sv) return 0;
     if (SvGMAGICAL(sv))

@@ -25,8 +25,8 @@ static void pe_idle_dtor(pe_watcher *ev) {
 }
 
 static char *pe_idle_start(pe_watcher *ev, int repeating) {
-    double now;
-    double min,max;
+    NV now;
+    NV min,max;
     pe_idle *ip = (pe_idle*) ev;
     if (!ev->callback)
 	return "without callback";
@@ -50,8 +50,8 @@ static char *pe_idle_start(pe_watcher *ev, int repeating) {
 }
 
 static void pe_idle_alarm(pe_watcher *wa, pe_timeable *_ignore) {
-    double now = NVtime();
-    double min,max,left;
+    NV now = NVtime();
+    NV min,max,left;
     pe_idle *ip = (pe_idle*) wa;
     pe_timeable_stop(&ip->tm);
     if (sv_2interval("min", ip->min_interval, &min)) {

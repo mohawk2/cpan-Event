@@ -1,7 +1,7 @@
 /* 100 levels will trigger a manditory warning from perl */
 #define MAX_CB_NEST 95
 
-static double QueueTime[PE_QUEUES];
+static NV QueueTime[PE_QUEUES];
 
 static pe_cbframe CBFrame[MAX_CB_NEST];
 static int CurCBFrame = -1;

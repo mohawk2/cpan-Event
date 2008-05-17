@@ -27,7 +27,7 @@ static char *pe_timer_start(pe_watcher *ev, int repeat) {
     if (repeat) {
 	/* We just finished the callback and need to re-insert at
 	   the appropriate time increment. */
-	double interval;
+	NV interval;
 
 	if (!sv_2interval("timer", tm->interval, &interval))
 	    return "repeating timer has no interval";

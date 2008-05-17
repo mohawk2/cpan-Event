@@ -73,10 +73,10 @@ static void _queue_io(pe_io *wa, int got) {
 #if defined(HAS_DEVPOLL) && !PE_SYS_IO
 #define PE_SYS_IO 1
 
-static void pe_sys_sleep(double left) {
+static void pe_sys_sleep(NV left) {
     int ret;
-    double t0 = NVtime();
-    double t1 = t0 + left;
+    NV t0 = NVtime();
+    NV t1 = t0 + left;
     while (1) {
         ret = poll(0, 0, (int) (left * 1000)); /* hope zeroes okay */
         if (ret < 0 && errno != EAGAIN && errno != EINTR)
@@ -143,7 +143,7 @@ static void pe_sys_io_del (pe_io *ev) {
     fdToEvent[ev->fd].ev = NULL;
 }
 
-static void pe_sys_multiplex(double timeout) {
+static void pe_sys_multiplex(NV timeout) {
     pe_io *ev;
     int xx, got, mask, fd;
     int ret;
@@ -236,10 +236,10 @@ static struct pollfd *Pollfd=0;
 static int pollMax=0;
 static int Nfds;
 
-static void pe_sys_sleep(double left) {
+static void pe_sys_sleep(NV left) {
     int ret;
-    double t0 = NVtime();
-    double t1 = t0 + left;
+    NV t0 = NVtime();
+    NV t1 = t0 + left;
     while (1) {
 	ret = poll(0, 0, (int) (left * 1000)); /* hope zeroes okay */
 	if (ret < 0 && errno != EAGAIN && errno != EINTR)
@@ -256,7 +256,7 @@ static void pe_sys_sleep(double left) {
 static void pe_sys_io_add (pe_io *ev) {}
 static void pe_sys_io_del (pe_io *ev) {}
 
-static void pe_sys_multiplex(double timeout) {
+static void pe_sys_multiplex(NV timeout) {
     pe_io *ev;
     int xx;
     int ret;
@@ -352,10 +352,10 @@ static void pe_sys_multiplex(double timeout) {
 static int Nfds;
 static fd_set Rfds, Wfds, Efds;
 
-static void pe_sys_sleep(double left) {
+static void pe_sys_sleep(NV left) {
     struct timeval tm;
-    double t0 = NVtime();
-    double t1 = t0 + left;
+    NV t0 = NVtime();
+    NV t1 = t0 + left;
     int ret;
     while (1) {
 	tm.tv_sec = left;
@@ -375,7 +375,7 @@ static void pe_sys_sleep(double left) {
 static void pe_sys_io_add (pe_io *ev) {}
 static void pe_sys_io_del (pe_io *ev) {}
 
-static void pe_sys_multiplex(double timeout) {
+static void pe_sys_multiplex(NV timeout) {
     struct timeval tm;
     int ret;
     fd_set rfds, wfds, efds;
