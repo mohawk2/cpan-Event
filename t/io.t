@@ -85,6 +85,9 @@ Event->io(timeout => 2, repeat => 0,
 
 loop();
 
-skip $Config{osname} eq 'darwin', $noticed_bogus_fd, 1;
-skip $Config{osname} eq 'darwin', !defined $bogus->fd;
+my $bogus_fd_detection = !($Config{osname} eq 'darwin' or
+			   $Config{archname} =~ m/^armv5tejl/);
+
+skip $bogus_fd_detection, $noticed_bogus_fd, 1;
+skip $bogus_fd_detection, !defined $bogus->fd;
 ok $bogus_timeout > 0;
