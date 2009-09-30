@@ -1,3 +1,8 @@
+2009-09-25  Joshua Pritikin  <joshua@localhost>
+
+	* The repository has moved to a (hopefully) more permanent
+	location.  See http://gitorious.org/perl-event/mainline
+
 2007-05-21    <joshua@always.joy.eth.net>
 
 	* Event is now stored in GIT. You can grab a copy with "git clone
