@@ -47,8 +47,10 @@ lib/Event/Watcher.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
+META.yml
 ppport.h
 README
+README.EV
 t/attach_to.t
 t/bored.t
 t/callback.t
@@ -74,6 +76,6 @@ t/unconfigured.t
 t/var.t
 TODO
 Tutorial.pdf
+Tutorial.pdf-errata.txt
 util/bench.pl
 util/filehandle.txt
-META.yml
