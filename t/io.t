@@ -86,7 +86,8 @@ Event->io(timeout => 2, repeat => 0,
 loop();
 
 my $bogus_fd_detection;
-if ($Config{osname} eq 'darwin' or $Config{archname} =~ m/^armv5tejl/) {
+if ($Config{osname} eq 'darwin' or $Config{osname} eq 'gnu' or
+    $Config{archname} =~ m/^armv5tejl/) {
     $bogus_fd_detection = 'Cannot detect bogus file descriptors';
 }
 
