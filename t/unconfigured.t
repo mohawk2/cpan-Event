@@ -23,5 +23,5 @@ my $var = 1;
 eval { Event->var(@p, poll => 0, var => \$var) };
 ok $@, '/without poll events/';
 
-eval { Event->var(@p, var => \$$) };
+eval { Event->var(@p, var => \$]) };
 ok $@, '/read\-only/';
