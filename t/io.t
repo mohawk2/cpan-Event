@@ -21,12 +21,23 @@ ok $@, "/nothing to watch/";
 eval { Event->io(fd => \*STDIN, cb => \&die, poll => 0) };
 ok $@, "/nothing to watch/";
 
+my $cannot_detect_bogus_fd;
+if ($Config{osname} eq 'darwin' or $Config{osname} eq 'gnu' or
+    $Config{archname} =~ m/^armv5tejl/) {
+    # GNU/Hurd's poll returns with -EBADF which is accurate
+    # but we cannot determine which fd is bad.
+    $cannot_detect_bogus_fd = 'Cannot detect bogus file descriptors';
+}
+
 my $noticed_bogus_fd=0;
 my $bogus_timeout=0;
-my $bogus = Event->io(desc => 'oops', poll => 'r', fd => 123,
+my $bogus;
+if (!$cannot_detect_bogus_fd) {
+    $bogus = Event->io(desc => 'oops', poll => 'r', fd => 123,
 		      timeout => .1, cb => sub {
 			  ++$bogus_timeout;
 		      });
+}
 
 $SIG{__WARN__} = sub {
     my $is_it = $_[0] =~ m/\'oops\' was unexpectedly/;
@@ -84,12 +95,6 @@ Event->io(timeout => 2, repeat => 0,
 
 loop();
 
-my $bogus_fd_detection;
-if ($Config{osname} eq 'darwin' or $Config{osname} eq 'gnu' or
-    $Config{archname} =~ m/^armv5tejl/) {
-    $bogus_fd_detection = 'Cannot detect bogus file descriptors';
-}
-
-skip $bogus_fd_detection, $noticed_bogus_fd, 1;
-skip $bogus_fd_detection, !defined $bogus->fd;
+skip $cannot_detect_bogus_fd, $noticed_bogus_fd, 1;
+skip $cannot_detect_bogus_fd, !defined $bogus->fd;
 ok $bogus_timeout > 0;
