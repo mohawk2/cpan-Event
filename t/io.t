@@ -96,5 +96,5 @@ Event->io(timeout => 2, repeat => 0,
 loop();
 
 skip $cannot_detect_bogus_fd, $noticed_bogus_fd, 1;
-skip $cannot_detect_bogus_fd, !defined $bogus->fd;
-ok $bogus_timeout > 0;
+skip $cannot_detect_bogus_fd, $bogus && !defined $bogus->fd;
+skip $cannot_detect_bogus_fd, $bogus_timeout > 0;
