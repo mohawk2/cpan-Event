@@ -69,8 +69,7 @@ static char *pe_var_start(pe_watcher *_ev, int repeat) {
     sv = SvRV(sv);
     if (SvREADONLY(sv))
 	return "cannot trace read-only variable";
-    if (!SvUPGRADE(sv, SVt_PVMG))
-	return "SvUPGRADE failed";
+    (void)SvUPGRADE(sv, SVt_PVMG);
 
     mgp = &SvMAGIC(sv);
     while ((mg = *mgp)) {

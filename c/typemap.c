@@ -166,7 +166,7 @@ int sv_2interval(char *label, SV *in, NV *out) {
 
 SV* events_mask_2sv(int mask) {
     SV *ret = newSV(0);
-    SvUPGRADE(ret, SVt_PVIV);
+    (void)SvUPGRADE(ret, SVt_PVIV);
     sv_setpvn(ret, "", 0);
     if (mask & PE_R) sv_catpv(ret, "r");
     if (mask & PE_W) sv_catpv(ret, "w");
