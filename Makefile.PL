@@ -21,6 +21,16 @@ my @opt=(PREREQ_PM => { Test => 1 },
 					  map { "$_ */$_ */*/$_" }
 					  qw(*% *.html *.b[ac]k *.old *.orig))
 			   },
+	 META_MERGE => {
+	   "meta-spec" => { version => 2 },
+	   resources => {
+	     repository => {
+	       type => 'git',
+	       url => 'https://github.com/mohawk2/cpan-Event.git',
+	       web => 'https://github.com/mohawk2/cpan-Event',
+	     },
+	   },
+	 },
 	);
 
 WriteMakefile(@opt);
