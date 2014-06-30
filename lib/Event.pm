@@ -14,7 +14,7 @@ use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX
 use vars qw($VERSION @EXPORT_OK
 	    $API $DebugLevel $Eval $DIED $Now);
-$VERSION = '1.21';
+$VERSION = '1.22';
 
 # If we inherit DynaLoader then we inherit AutoLoader; Bletch!
 require DynaLoader;
@@ -207,10 +207,10 @@ _load_watcher($_) for qw(idle io signal timer var);
 # use Inline with => 'Event';
 
 sub Inline {
-    my $language = shift;
+    my ($class, $language) = @_;
     if ($language ne 'C') {
 	warn "Warning: Event.pm does not provide Inline hints for the $language language\n";
-	return
+	return;
     }
 
     require Event::MakeMaker;
