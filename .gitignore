@@ -1,0 +1,10 @@
+.*.swp
+*.bs
+*.json
+*.o
+*.yml
+blib/
+pm_to_blib
+Makefile
+Makefile.old
+Event.c
