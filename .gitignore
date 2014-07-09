@@ -1,6 +1,10 @@
-Makefile
-Event.c
+.*.swp
+*.bs
+*.json
 *.o
-Event.bs
+*.yml
+blib/
 pm_to_blib
-blib
+Makefile
+Makefile.old
+Event.c

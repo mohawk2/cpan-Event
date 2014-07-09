@@ -208,7 +208,7 @@ WKEYMETH(_io_timeout_cb) {
 	SV *ret = (WaTMPERLCB(ev)?
 		   (SV*) io->tm_callback :
 		   (io->tm_callback?
-		    sv_2mortal(newSVpvf("<FPTR=0x%x EXT=0x%x>",
+		    sv_2mortal(newSVpvf("<FPTR=0x%p EXT=0x%p>",
 					io->tm_callback, io->tm_ext_data)) :
 		    &PL_sv_undef));
 	dSP;
