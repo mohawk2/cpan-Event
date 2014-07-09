@@ -12,9 +12,8 @@ require 5.006;  #maybe
 use base 'Exporter';
 use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX
-use vars qw($VERSION @EXPORT_OK
-	    $API $DebugLevel $Eval $DIED $Now);
-$VERSION = '1.22';
+our $API;
+our $VERSION = '1.22';
 
 # If we inherit DynaLoader then we inherit AutoLoader; Bletch!
 require DynaLoader;
@@ -24,11 +23,11 @@ require DynaLoader;
 (defined(&bootstrap)? \&bootstrap : \&DynaLoader::bootstrap)->
     (__PACKAGE__, $VERSION);
 
-$DebugLevel = 0;
-$Eval = 0;		# avoid because c_callback is exempt
-$DIED = \&default_exception_handler;
+our $DebugLevel = 0;
+our $Eval = 0;		# avoid because c_callback is exempt
+our $DIED = \&default_exception_handler;
 
-@EXPORT_OK = qw(time all_events all_watchers all_running all_queued all_idle
+our @EXPORT_OK = qw(time all_events all_watchers all_running all_queued all_idle
 		one_event sweep loop unloop unloop_all sleep queue
 		queue_pending
 		QUEUES PRIO_NORMAL PRIO_HIGH NO_TIME_HIRES);
