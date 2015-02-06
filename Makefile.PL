@@ -11,6 +11,7 @@ push @Safe, OPTIMIZE => '-g' if 0;
 push @Safe, CC => 'insure', LD => 'insure', OPTIMIZE => '-g' if 0;
 
 my @opt=(PREREQ_PM => { Test => 1 },
+     MIN_PERL_VERSION  => 'v5.6.0',
 	 VERSION_FROM	=> "./lib/Event.pm",
 	 NAME      	=> "Event",
 	 TYPEMAPS       => ['./lib/Event/typemap'],
