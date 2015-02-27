@@ -1,4 +1,4 @@
-# -*-perl-*- ASAP
+# not distributed on CPAN, so not in MANIFEST
 
 use Test::More;
 eval "use Test::Pod 1.00";
