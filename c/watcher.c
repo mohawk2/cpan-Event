@@ -140,7 +140,7 @@ WKEYMETH(_watcher_callback) {
 	SV *ret = (WaPERLCB(ev)?
 		   (SV*) ev->callback :
 		   (ev->callback?
-		    sv_2mortal(newSVpvf("<FPTR=0x%x EXT=0x%x>",
+		    sv_2mortal(newSVpvf("<FPTR=0x%p EXT=0x%p>",
 					ev->callback, ev->ext_data)) :
 		    &PL_sv_undef));
 	dSP;
