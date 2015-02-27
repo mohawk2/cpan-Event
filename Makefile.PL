@@ -1,6 +1,6 @@
 # This -*- perl -*- script makes the Makefile
 
-require 5.006_003; # 5.006_002 fails
+require 5.008; # 5.006_002 fails
 
 use ExtUtils::MakeMaker;
 
@@ -11,6 +11,7 @@ push @Safe, OPTIMIZE => '-g' if 0;
 push @Safe, CC => 'insure', LD => 'insure', OPTIMIZE => '-g' if 0;
 
 my @opt=(PREREQ_PM => { Test => 1 },
+	 MIN_PERL_VERSION  => 'v5.8.0',
 	 VERSION_FROM	=> "./lib/Event.pm",
 	 NAME      	=> "Event",
 	 TYPEMAPS       => ['./lib/Event/typemap'],
