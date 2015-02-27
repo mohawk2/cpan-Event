@@ -16,7 +16,7 @@
 #
 
 # check perl version
-require 5.005;
+require 5.008;
 
 # pragmata
 use strict;

@@ -16,13 +16,6 @@ extern "C" {
 
 #include "ppport.h"
 
-/* This is unfortunately necessary for the 5.005_0x series. */
-#if PERL_REVISION == 5 && PERL_VERSION <= 5 && PERL_SUBVERSION < 53
-#  define PL_vtbl_uvar vtbl_uvar
-#  define PL_sig_name sig_name
-#  define whichsig Perl_whichsig   /* ? */
-#endif
-
 /* lexical warnings -- waiting for appropriate magic from
    paul.marquess@bt.com */
 #if 0

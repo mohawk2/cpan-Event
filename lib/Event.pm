@@ -8,7 +8,7 @@ BEGIN {  # do the right thing for threads?
 }
 
 package Event;
-require 5.006;  #maybe
+require 5.008;
 use base 'Exporter';
 use Carp;
 eval { require Carp::Heavy; };  # work around perl_call_pv bug XXX

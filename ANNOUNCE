@@ -18,7 +18,7 @@ should work with minor tweaking.
              solaris 2.6 sun4-solaris
              solaris 7 i86pc-solaris 
 
-* Perl 5.005_03 (or better) is required.
+* Perl 5.008 (or better) is required.
 
 * Win32 support should not be too difficult but no volunteer has
 stepped forward to take ownership.
