@@ -52,7 +52,7 @@ sub init {
     # set up prio
     {
 	no strict 'refs';
-	$o->prio($ { ref($o)."::DefaultPriority" } || Event::PRIO_NORMAL);
+	$o->prio($ { ref($o)."::DefaultPriority" } || Event::PRIO_NORMAL());
 	if (exists $arg->{nice}) {
 	    $o->prio($o->prio + delete $arg->{nice});
 	}
