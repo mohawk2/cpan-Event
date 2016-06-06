@@ -14,7 +14,7 @@ c/typemap.c
 c/unix.c
 c/var.c
 c/watcher.c
-ChangeLog
+Changes
 demo/echo.t
 demo/group.t
 demo/idle2.t
