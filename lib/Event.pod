@@ -239,7 +239,7 @@ already handling the signal, which it would only do if there were
 another active watcher for the same signal.  If this situation might
 occur, and it would be a problem for the new watcher to see older
 events, call C<queue_pending()> immediately before starting the new
-watcher in order to reify any outstanding events.  This explaination
+watcher in order to reify any outstanding events.  This explanation
 may be more clear if read along with C<demo/queue_pending.t>.
 
 =item $watcher->again
@@ -327,7 +327,7 @@ often than C<min> seconds.
 
 If neither C<min> nor C<max> is specified, the watcher defaults to
 one-shot behaviour (C<repeat> false), otherwise it defaults to repeating.
-In either case, the default can be overidden by specifying a C<repeat>
+In either case, the default can be overridden by specifying a C<repeat>
 attribute.  C<min> defaults to 0.01, and C<max> defaults to infinity.
 
 =item var
