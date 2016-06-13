@@ -1,3 +1,6 @@
+1.26 2015-06-13
+  - fix doc typos (Lucas Kanashiro)
+
 1.25 2015-06-06
   - Fix Event::PRIO_NORMAL call in Watcher.pm (Lucas Kanashiro)
   - update Changes
