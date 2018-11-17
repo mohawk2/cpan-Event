@@ -26,5 +26,14 @@ WriteMakefile(
         web => 'https://github.com/mohawk2/cpan-Event',
       },
     },
+    prereqs => {
+      develop => {
+        requires => {
+          'Test::CheckManifest' => '0.9',
+          'Test::Pod' => '1.22',
+          'Pod::Markdown' => 0,
+        },
+      },
+    },
   },
 );
