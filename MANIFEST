@@ -47,6 +47,7 @@ lib/Event/var.pm
 lib/Event/Watcher.pm
 Makefile.PL
 MANIFEST
+MANIFEST.SKIP
 ppport.h
 README
 README.EV
