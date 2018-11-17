@@ -3,7 +3,9 @@ require 5.008; # 5.006_002 fails
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-  PREREQ_PM => { Test => 1 },
+  TEST_REQUIRES => {
+    Test => 1,
+  },
   MIN_PERL_VERSION  => 'v5.8.0',
   VERSION_FROM	=> "./lib/Event.pm",
   NAME      	=> "Event",
@@ -16,6 +18,7 @@ WriteMakefile(
   },
   META_MERGE => {
     "meta-spec" => { version => 2 },
+    dynamic_config => 0,
     resources => {
       repository => {
         type => 'git',
