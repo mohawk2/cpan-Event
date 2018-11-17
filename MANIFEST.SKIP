@@ -8,3 +8,4 @@ Event\.bs
 Event\.c
 Event\.o
 MANIFEST\.SKIP
+\.swp$
