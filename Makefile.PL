@@ -8,6 +8,7 @@ WriteMakefile(
   },
   MIN_PERL_VERSION  => 'v5.8.0',
   VERSION_FROM	=> "./lib/Event.pm",
+  LICENSE	=> "perl_5",
   NAME      	=> "Event",
   TYPEMAPS       => ['./lib/Event/typemap'],
   INC		=> '-Ic -Ilib/Event',
