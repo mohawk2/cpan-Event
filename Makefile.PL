@@ -26,6 +26,9 @@ WriteMakefile(
         url => 'https://github.com/mohawk2/cpan-Event.git',
         web => 'https://github.com/mohawk2/cpan-Event',
       },
+      bugtracker  => {
+        web => 'https://github.com/mohawk2/cpan-Event/issues',
+      },
     },
     prereqs => {
       develop => {
