@@ -1,3 +1,8 @@
+1.27 2021-04-28
+  - removed ill advised restriction on Event::Inline, used to
+    integrate 'with' Inline::* modules
+  - *no* version bump
+
 1.27 2018-11-17
   - only Zero(Polld) if not NULL (reported by @andk, thanks!)
 
