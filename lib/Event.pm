@@ -206,7 +206,7 @@ _load_watcher($_) for qw(idle io signal timer var);
 # use Inline with => 'Event';
 # note: return information for all values of $language
 sub Inline {
-    my $class = shift;
+    my ($class, $language) = @_;
     require Event::MakeMaker;
     my $path = $Event::MakeMaker::installsitearch;
     require Config;
