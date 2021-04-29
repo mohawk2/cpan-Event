@@ -204,7 +204,6 @@ _load_watcher($_) for qw(idle io signal timer var);
 
 # Provide hints to Inline.pm for usage:
 # use Inline with => 'Event';
-# note: return information for all values of $language
 sub Inline {
     my ($class, $language) = @_;
     require Event::MakeMaker;
